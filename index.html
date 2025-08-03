@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #c1d2f5; 
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <header class="bg-blue-900 text-white text-center p-6 shadow-lg">
+        <h1 class=" font-bold">ของที่ระลึก 30 ปี CSmju</h1>
+    </header>
+
+    <main class="container mx-auto p-4">
+     <a href="customer.html" target="_blank" class="block text-red-700 font-medium mb-1 p-2 border rounded-lg hover:bg-gray-200 transition duration-200 text-center">
+    Customer Page
+</a>
+        <form id="stock-form" class="bg-blue-50 rounded-xl shadow-md p-6 space-y-4 mb-8">
+            <h2 class="text-xl font-bold text-blue-900 mb-4">แก้ไขข้อมูล</h2>
+            <div>
+                <label for="product-type" class="block text-gray-700 font-medium mb-1">ประเภทสินค้า</label>
+                <select id="product-type" class="text-white  border rounded-lg p-2 bg-blue-900 focus:ring-blue-900 focus:border-blue-50 hover:bg-blue-700"> ">
+                    <option value="">-- เลือกประเภทสินค้า --</option>
+                    <option value="shirt">เสื้อ</option>
+                    <option value="bag">กระเป๋า</option>
+                    <option value="cup">แก้ว</option>
+                    <option value="hat">หมวก</option>
+                    <option value="umbrella">ร่ม</option>
+                    <option value="badge">เข็มกลัด</option>
+                    <option value="notebook">สมุด</option>
+                    <option value="pen">ปากกา</option>
+                </select>
+            </div>
+
+            <div id="shirt-specific-fields" class="grid grid-cols-2 md:grid-cols-3 gap-4 hidden">
+                <div>
+                    <label for="product-col" class="block text-gray-700 font-medium mb-1">สี</label>
+                    <select id="product-col" class="w-full border rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="white">ขาว</option>
+                        <option value="blue">กรม</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="product-size" class="block text-gray-700 font-medium mb-1">ขนาด</label>
+                    <select id="product-size" class="w-full border rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option>SS</option>
+                        <option>S</option>
+                        <option>M</option>
+                        <option>L</option>
+                        <option>XL</option>
+                        <option>2XL</option>
+                        <option>3XL</option>
+                        <option>4XL</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="common-product-fields" class="grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
+                <div>
+                    <label for="product-qty" class="block text-gray-700 font-medium mb-1">จำนวน</label>
+                    <input id="product-qty" type="number" class="w-full border rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" step="10" min="0" value="0" placeholder="จำนวนสินค้า">
+                </div>
+                <div>
+                    <label for="product-price" class="block text-gray-700 font-medium mb-1">ราคา (บาท)</label>
+                    <input id="product-price" type="number" placeholder="เช่น 250" class="w-full border rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500" step="50" min="0">
+                </div>
+                <div>
+                    <label for="product-img" class="block text-gray-700 font-medium mb-1">รูปภาพสินค้า</label>
+                    <input id="product-img" type="file" accept="image/*" class="bg-blue-900  border rounded-lg p-2 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-gray-100 text-white focus:ring-blue-500 focus:border-blue-50">
+                </div>
+            </div>
+
+            <div class="text-right">
+                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-200">
+                    บันทึกข้อมูล
+                </button>
+            </div>
+        </form>
+
+        <div class="bg-blue-50 rounded-xl shadow-md p-6">
+            <h2 class="text-xl font-bold text-blue-900 mb-4">Stock สินค้าทั้งหมด</h2>
+
+            <div id="product-stock-display">
+                <label class="inline-flex items-center mb-4">
+                    <input type="checkbox" id="toggle-shirt-white" data-target="shirt-white-details" class="form-checkbox h-5 w-5 text-blue-600">
+                    <span class="ml-2 text-gray-700 font-medium">เสื้อสีขาว</span>
+                </label>
+                <div id="shirt-white-details" class="hidden mt-4 mb-6 overflow-x-auto">
+                    <table class="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-200 text-left text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 border border-gray-300">ขนาด</th>
+                                <th class="py-3 px-6 border border-gray-300">จำนวน</th>
+                                <th class="py-3 px-6 border border-gray-300">ราคา/ตัว</th>
+                                <th class="py-3 px-6 border border-gray-300">รูป</th>
+                                <th class="py-3 px-6 border border-gray-300">ลบข้อมูล</th> </tr>
+                        </thead>
+                        <tbody id="shirt-white-table-body" class="text-gray-700 text-sm"></tbody>
+                    </table>
+                </div>
+                <br>
+
+                <label class="inline-flex items-center mb-4">
+                    <input type="checkbox" id="toggle-shirt-blue" data-target="shirt-blue-details" class="form-checkbox h-5 w-5 text-blue-600">
+                    <span class="ml-2 text-gray-700 font-medium">เสื้อสีกรม</span>
+                </label>
+                <div id="shirt-blue-details" class="hidden mt-4 mb-6 overflow-x-auto">
+                    <table class="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-200 text-left text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 border border-gray-300">ขนาด</th>
+                                <th class="py-3 px-6 border border-gray-300">จำนวน</th>
+                                <th class="py-3 px-6 border border-gray-300">ราคา/ตัว</th>
+                                <th class="py-3 px-6 border border-gray-300">รูป</th>
+                                <th class="py-3 px-6 border border-gray-300">ลบข้อมูล</th> </tr>
+                        </thead>
+                        <tbody id="shirt-blue-table-body" class="text-gray-700 text-sm"></tbody>
+                    </table>
+                </div>
+                <br>
+
+                <label class="inline-flex items-center mb-4">
+                    <input type="checkbox" id="toggle-hat" data-target="hat-details" class="form-checkbox h-5 w-5 text-blue-600">
+                    <span class="ml-2 text-gray-700 font-medium">หมวก</span>
+                </label>
+                <div id="hat-details" class="hidden mt-4 mb-6 overflow-x-auto">
+                    <table class="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-200 text-left text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 border border-gray-300">รายละเอียด</th>
+                                <th class="py-3 px-6 border border-gray-300">จำนวน</th>
+                                <th class="py-3 px-6 border border-gray-300">ราคา/ชิ้น</th>
+                                <th class="py-3 px-6 border border-gray-300">รูป</th>
+                                <th class="py-3 px-6 border border-gray-300">ลบข้อมูล</th> </tr>
+                        </thead>
+                        <tbody id="hat-table-body" class="text-gray-700 text-sm"></tbody>
+                    </table>
+                </div>
+                <br>
+
+                <label class="inline-flex items-center mb-4">
+                    <input type="checkbox" id="toggle-bag" data-target="bag-details" class="form-checkbox h-5 w-5 text-blue-600">
+                    <span class="ml-2 text-gray-700 font-medium">กระเป๋า</span>
+                </label>
+                <div id="bag-details" class="hidden mt-4 mb-6 overflow-x-auto">
+                    <table class="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-200 text-left text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 border border-gray-300">รายละเอียด</th>
+                                <th class="py-3 px-6 border border-gray-300">จำนวน</th>
+                                <th class="py-3 px-6 border border-gray-300">ราคา/ชิ้น</th>
+                                <th class="py-3 px-6 border border-gray-300">รูป</th>
+                                <th class="py-3 px-6 border border-gray-300">ลบข้อมูล</th> </tr>
+                        </thead>
+                        <tbody id="bag-table-body" class="text-gray-700 text-sm"></tbody>
+                    </table>
+                </div>
+                <br>
+
+                <label class="inline-flex items-center mb-4">
+                    <input type="checkbox" id="toggle-cup" data-target="cup-details" class="form-checkbox h-5 w-5 text-blue-600">
+                    <span class="ml-2 text-gray-700 font-medium">แก้ว</span>
+                </label>
+                <div id="cup-details" class="hidden mt-4 mb-6 overflow-x-auto">
+                    <table class="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-200 text-left text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 border border-gray-300">รายละเอียด</th>
+                                <th class="py-3 px-6 border border-gray-300">จำนวน</th>
+                                <th class="py-3 px-6 border border-gray-300">ราคา/ชิ้น</th>
+                                <th class="py-3 px-6 border border-gray-300">รูป</th>
+                                <th class="py-3 px-6 border border-gray-300">ลบข้อมูล</th> </tr>
+                        </thead>
+                        <tbody id="cup-table-body" class="text-gray-700 text-sm"></tbody>
+                    </table>
+                </div>
+                <br>
+
+                <label class="inline-flex items-center mb-4">
+                    <input type="checkbox" id="toggle-umbrella" data-target="umbrella-details" class="form-checkbox h-5 w-5 text-blue-600">
+                    <span class="ml-2 text-gray-700 font-medium">ร่ม</span>
+                </label>
+                <div id="umbrella-details" class="hidden mt-4 mb-6 overflow-x-auto">
+                    <table class="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-200 text-left text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 border border-gray-300">รายละเอียด</th>
+                                <th class="py-3 px-6 border border-gray-300">จำนวน</th>
+                                <th class="py-3 px-6 border border-gray-300">ราคา/ชิ้น</th>
+                                <th class="py-3 px-6 border border-gray-300">รูป</th>
+                                <th class="py-3 px-6 border border-gray-300">ลบข้อมูล</th> </tr>
+                        </thead>
+                        <tbody id="umbrella-table-body" class="text-gray-700 text-sm"></tbody>
+                    </table>
+                </div>
+                <br>
+
+                <label class="inline-flex items-center mb-4">
+                    <input type="checkbox" id="toggle-badge" data-target="badge-details" class="form-checkbox h-5 w-5 text-blue-600">
+                    <span class="ml-2 text-gray-700 font-medium">เข็มกลัด</span>
+                </label>
+                <div id="badge-details" class="hidden mt-4 mb-6 overflow-x-auto">
+                    <table class="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-200 text-left text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 border border-gray-300">รายละเอียด</th>
+                                <th class="py-3 px-6 border border-gray-300">จำนวน</th>
+                                <th class="py-3 px-6 border border-gray-300">ราคา/ชิ้น</th>
+                                <th class="py-3 px-6 border border-gray-300">รูป</th>
+                                <th class="py-3 px-6 border border-gray-300">ลบข้อมูล</th> </tr>
+                        </thead>
+                        <tbody id="badge-table-body" class="text-gray-700 text-sm"></tbody>
+                    </table>
+                </div>
+                <br>
+
+                <label class="inline-flex items-center mb-4">
+                    <input type="checkbox" id="toggle-notebook" data-target="notebook-details" class="form-checkbox h-5 w-5 text-blue-600">
+                    <span class="ml-2 text-gray-700 font-medium">สมุด</span>
+                </label>
+                <div id="notebook-details" class="hidden mt-4 mb-6 overflow-x-auto">
+                    <table class="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-200 text-left text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 border border-gray-300">รายละเอียด</th>
+                                <th class="py-3 px-6 border border-gray-300">จำนวน</th>
+                                <th class="py-3 px-6 border border-gray-300">ราคา/ชิ้น</th>
+                                <th class="py-3 px-6 border border-gray-300">รูป</th>
+                                <th class="py-3 px-6 border border-gray-300">ลบข้อมูล</th> </tr>
+                        </thead>
+                        <tbody id="notebook-table-body" class="text-gray-700 text-sm"></tbody>
+                    </table>
+                </div>
+                <br>
+
+                <label class="inline-flex items-center mb-4">
+                    <input type="checkbox" id="toggle-pen" data-target="pen-details" class="form-checkbox h-5 w-5 text-blue-600">
+                    <span class="ml-2 text-gray-700 font-medium">ปากกา</span>
+                </label>
+                <div id="pen-details" class="hidden mt-4 mb-6 overflow-x-auto">
+                    <table class="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-200 text-left text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 border border-gray-300">รายละเอียด</th>
+                                <th class="py-3 px-6 border border-gray-300">จำนวน</th>
+                                <th class="py-3 px-6 border border-gray-300">ราคา/ชิ้น</th>
+                                <th class="py-3 px-6 border border-gray-300">รูป</th>
+                                <th class="py-3 px-6 border border-gray-300">ลบข้อมูล</th> </tr>
+                        </thead>
+                        <tbody id="pen-table-body" class="text-gray-700 text-sm"></tbody>
+                    </table>
+                </div>
+
+            </div> </div>
+    </main>
+
+    <script>
+       
+        let stockData = JSON.parse(localStorage.getItem('merchandiseStock')) || {
+            shirt: { white: [], blue: [] },
+            bag: [],
+            cup: [],
+            hat: [],
+            umbrella: [],
+            badge: [],
+            notebook: [],
+            pen: []
+        };
+
+        // ลำดับของขนาดเสื้อ
+        const shirtSizeOrder = ["SS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"];
+
+        
+        const form = document.getElementById("stock-form");
+        const productTypeSelect = document.getElementById("product-type");
+        const productColSelect = document.getElementById("product-col");
+        const productSizeSelect = document.getElementById("product-size");
+        const productQtyInput = document.getElementById("product-qty");
+        const productPriceInput = document.getElementById("product-price");
+        const productImgInput = document.getElementById("product-img");
+
+        const shirtSpecificFields = document.getElementById("shirt-specific-fields");
+        const commonProductFields = document.getElementById("common-product-fields");
+
+       
+        function saveStockData() {
+            localStorage.setItem('merchandiseStock', JSON.stringify(stockData));
+        }
+
+        
+        function sortStockData() {
+            
+            if (stockData.shirt.white) {
+                stockData.shirt.white.sort((a, b) => {
+                    return shirtSizeOrder.indexOf(a.size) - shirtSizeOrder.indexOf(b.size);
+                });
+            }
+            if (stockData.shirt.blue) {
+                stockData.shirt.blue.sort((a, b) => {
+                    return shirtSizeOrder.indexOf(a.size) - shirtSizeOrder.indexOf(b.size);
+                });
+            }
+
+            
+            const otherProductTypes = ['bag', 'cup', 'hat', 'umbrella', 'badge', 'notebook', 'pen'];
+            otherProductTypes.forEach(type => {
+                if (stockData[type]) {
+                    stockData[type].sort((a, b) => {
+                        const detailA = a.details || '';
+                        const detailB = b.details || '';
+                        return detailA.localeCompare(detailB);
+                    });
+                }
+            });
+        }
+
+        
+        function deleteItem(type, index, color = null) {
+            
+            if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?")) {
+                return; 
+            }
+
+            if (type === "shirt" && color) {
+                
+                stockData.shirt[color].splice(index, 1);
+            } else {
+                
+                stockData[type].splice(index, 1);
+            }
+
+            sortStockData();       
+            saveStockData();       
+            renderAllStockTables(); 
+        }
+
+
+       
+        function renderAllStockTables() {
+            
+            const shirtWhiteTableBody = document.getElementById("shirt-white-table-body");
+            shirtWhiteTableBody.innerHTML = "";
+            stockData.shirt.white.forEach((item, index) => { 
+                shirtWhiteTableBody.innerHTML += `
+                    <tr class="hover:bg-gray-100">
+                        <td class="py-3 px-6 border border-gray-300">${item.size}</td>
+                        <td class="py-3 px-6 border border-gray-300 text-center">${item.qty}</td>
+                        <td class="py-3 px-6 border border-gray-300">${item.price}</td>
+                        <td class="py-3 px-6 border border-gray-300">
+                            <img src="${item.imgURL}" class="w-16 h-16 object-cover rounded-md" alt="${item.type} ${item.color} ${item.size}" />
+                        </td>
+                        <td class="py-3 px-6 border border-gray-300">
+                            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs"
+                                onclick="deleteItem('shirt', ${index}, 'white')">
+                                ลบ
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            
+            const shirtBlueTableBody = document.getElementById("shirt-blue-table-body");
+            shirtBlueTableBody.innerHTML = "";
+            stockData.shirt.blue.forEach((item, index) => { 
+                shirtBlueTableBody.innerHTML += `
+                    <tr class="hover:bg-gray-100">
+                        <td class="py-3 px-6 border border-gray-300">${item.size}</td>
+                        <td class="py-3 px-6 border border-gray-300 text-center">${item.qty}</td>
+                        <td class="py-3 px-6 border border-gray-300">${item.price}</td>
+                        <td class="py-3 px-6 border border-gray-300">
+                            <img src="${item.imgURL}" class="w-16 h-16 object-cover rounded-md" alt="${item.type} ${item.color} ${item.size}" />
+                        </td>
+                        <td class="py-3 px-6 border border-gray-300">
+                            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs"
+                                onclick="deleteItem('shirt', ${index}, 'blue')">
+                                ลบ
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            
+            const otherProductTypes = ['bag', 'cup', 'hat', 'umbrella', 'badge', 'notebook', 'pen'];
+            otherProductTypes.forEach(type => {
+                const tableBody = document.getElementById(`${type}-table-body`);
+                tableBody.innerHTML = "";
+                stockData[type].forEach((item, index) => { 
+                    tableBody.innerHTML += `
+                        <tr class="hover:bg-gray-100">
+                            <td class="py-3 px-6 border border-gray-300">${item.details || 'N/A'}</td>
+                            <td class="py-3 px-6 border border-gray-300 text-center">${item.qty}</td>
+                            <td class="py-3 px-6 border border-gray-300">${item.price}</td>
+                            <td class="py-3 px-6 border border-gray-300">
+                                <img src="${item.imgURL}" class="w-16 h-16 object-cover rounded-md" alt="${item.type}" />
+                            </td>
+                            <td class="py-3 px-6 border border-gray-300">
+                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-xs"
+                                    onclick="deleteItem('${type}', ${index})">
+                                    ลบ
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+        }
+
+        
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const type = productTypeSelect.value;
+            const qty = parseInt(productQtyInput.value);
+            const price = parseFloat(productPriceInput.value);
+            const imgInput = productImgInput;
+            const file = imgInput.files[0];
+
+            if (!type) {
+                alert("กรุณาเลือกประเภทสินค้า");
+                return;
+            }
+            if (isNaN(qty) || qty <= 0) {
+                alert("กรุณาใส่จำนวนสินค้าที่ถูกต้อง");
+                return;
+            }
+            if (isNaN(price) || price <= 0) {
+                alert("กรุณาใส่ราคาสินค้าที่ถูกต้อง");
+                return;
+            }
+            if (!file) {
+                alert("กรุณาเลือกรูปภาพสินค้า");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const imgURL = event.target.result;
+
+                let newItem = {
+                    type: type,
+                    qty: qty,
+                    price: price,
+                    imgURL: imgURL
+                };
+
+                if (type === "shirt") {
+                    const color = productColSelect.value;
+                    const size = productSizeSelect.value;
+                    newItem.color = color;
+                    newItem.size = size;
+
+                    if (color === "white") {
+                        stockData.shirt.white.push(newItem);
+                    } else if (color === "blue") {
+                        stockData.shirt.blue.push(newItem);
+                    }
+                } else {
+                    newItem.details = "";
+                    if (type === "hat") newItem.details = "Free Size";
+                    if (type === "bag") newItem.details = "W22*H28*D9 cm";
+                    if (type === "cup") newItem.details = "10 oz.";
+                    if (type === "umbrella") newItem.details = "88 cm.";
+                    if (type === "badge") newItem.details = "10 cm.";
+                    if (type === "notebook") newItem.details = "A6";
+                    if (type === "pen") newItem.details = "0.5 mm.";
+
+                    stockData[type].push(newItem);
+                }
+
+                sortStockData();
+                saveStockData();
+                renderAllStockTables();
+                form.reset();
+                productTypeSelect.value = "";
+                toggleFormFields();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        
+        function toggleFormFields() {
+            const type = productTypeSelect.value;
+            if (type === "shirt") {
+                shirtSpecificFields.classList.remove("hidden");
+                commonProductFields.classList.remove("hidden");
+            } else if (type) {
+                shirtSpecificFields.classList.add("hidden");
+                commonProductFields.classList.remove("hidden");
+            } else {
+                shirtSpecificFields.classList.add("hidden");
+                commonProductFields.classList.add("hidden");
+            }
+        }
+
+        productTypeSelect.addEventListener('change', toggleFormFields);
+
+       
+        document.querySelectorAll('input[type="checkbox"][data-target]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const targetId = this.dataset.target;
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.classList.toggle('hidden', !this.checked);
+                }
+            });
+        });
+
+       
+        document.addEventListener('DOMContentLoaded', () => {
+            sortStockData();
+            renderAllStockTables();
+            toggleFormFields();
+        });
+    </script>
+</body>
+</html>
